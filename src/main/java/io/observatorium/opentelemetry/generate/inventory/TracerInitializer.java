@@ -27,7 +27,7 @@ public class TracerInitializer {
 
     void onStart(@Observes StartupEvent ev) {
 		JaegerGrpcSpanExporter jaegerExporter = JaegerGrpcSpanExporter.builder()
-				.setEndpoint("http://" + System.getenv().getOrDefault("OTEL_OTLP_ENDPOINT", "localhost:14250")).build();
+				.setEndpoint(System.getenv().getOrDefault("OTEL_OTLP_ENDPOINT", "http://localhost:14250")).build();
         BatchSpanProcessor spanProcessor = BatchSpanProcessor.builder(jaegerExporter)
                 .setScheduleDelay(100, TimeUnit.MILLISECONDS).build();
 
