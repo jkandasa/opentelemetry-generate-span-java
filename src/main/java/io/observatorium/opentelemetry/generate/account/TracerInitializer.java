@@ -8,7 +8,7 @@ import javax.enterprise.inject.Produces;
 
 import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.api.trace.Tracer;
-import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporter;
+import io.opentelemetry.exporter.jaeger.JaegerGrpcSpanExporter;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
 import io.opentelemetry.sdk.resources.Resource;
 import io.opentelemetry.sdk.trace.SdkTracerProvider;
@@ -16,6 +16,7 @@ import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
 import io.opentelemetry.semconv.resource.attributes.ResourceAttributes;
 import io.quarkus.runtime.ShutdownEvent;
 import io.quarkus.runtime.StartupEvent;
+
 
 @ApplicationScoped
 public class TracerInitializer {
@@ -26,8 +27,9 @@ public class TracerInitializer {
     Tracer tracer;
 
     void onStart(@Observes StartupEvent ev) {
-        OtlpGrpcSpanExporter spanExporter = OtlpGrpcSpanExporter.builder().setTimeout(2, TimeUnit.SECONDS).build();
-        BatchSpanProcessor spanProcessor = BatchSpanProcessor.builder(spanExporter)
+		JaegerGrpcSpanExporter jaegerExporter = JaegerGrpcSpanExporter.builder()
+				.setEndpoint("http://" + System.getenv().getOrDefault("OTEL_OTLP_ENDPOINT", "localhost:14250")).build();
+        BatchSpanProcessor spanProcessor = BatchSpanProcessor.builder(jaegerExporter)
                 .setScheduleDelay(100, TimeUnit.MILLISECONDS).build();
 
         sdkProvider = OpenTelemetrySdk.builder()

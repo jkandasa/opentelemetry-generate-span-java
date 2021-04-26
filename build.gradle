@@ -16,6 +16,7 @@ dependencies {
     implementation platform("io.opentelemetry:opentelemetry-bom:1.0.0")
     implementation("io.opentelemetry:opentelemetry-api")
     implementation("io.opentelemetry:opentelemetry-sdk")
+    implementation 'io.opentelemetry:opentelemetry-exporter-jaeger'
     implementation("io.opentelemetry:opentelemetry-semconv:1.0.0-alpha")
     implementation("io.opentelemetry:opentelemetry-exporter-otlp")
     implementation "io.grpc:grpc-netty-shaded"
